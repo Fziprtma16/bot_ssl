@@ -15,8 +15,6 @@ async function Login (page){
 
     const Username = prompt('Email : ');
     const Password = prompt.hide('Password : ');
-    //await page.type('input[name="login[email]"]', 'fauzik002@gmail.com');
-    //await page.type('input[name="login[password]"]', 'Fauzi!@#123');
     await page.type('input[name="login[email]"]', Username);
     await page.type('input[name="login[password]"]', Password);
     await page.click('button[type="submit"]');
@@ -26,11 +24,11 @@ async function CheckingLimited(page){
     try {
         await page.waitForSelector('body > div:nth-child(5) > section > div > main > div > div > section.steps_container > ul > li.step.is_lockable.finalize.open > div > form > div.plans.free_plan_unavailable > div.plan.free > div.bottom_section > a');
         const data =  await page.$eval('body > div:nth-child(5) > section > div > main > div > div > section.steps_container > ul > li.step.is_lockable.finalize.open > div > form > div.plans.free_plan_unavailable > div.plan.free > div.bottom_section > a',
-        (el)=>getComputedStyle(el,":after").content); 
+        (el)=>getComputedStyle(el,":after").content);
         if(data == '"Limit Reached"'){
               console.log("Akun Anda Sudah Limited Untuk Free SSL");
-              process.exit(); 
-        }  
+              process.exit();
+        }
     }catch{}
 
 }
@@ -39,14 +37,14 @@ async function CheckingLimited(page){
 async function waitForDownload(page) {
     await page.waitForEvent('download'); // Menunggu sampai file diunduh
   }
-  
+
   async function moveDownloadedFile(page, targetDirectory) {
     const downloads = await page.browser().contexts()[0].downloads();
     const download = downloads.pop(); // Ambil file terakhir yang diunduh
-  
+
     // Tunggu hingga unduhan selesai
     await download.waitForFinished();
-  
+
     // Tentukan path lama dan baru file yang diunduh
     const oldPath = download.path();
     const fileName = download.suggestedFilename();
@@ -61,7 +59,7 @@ async function waitForDownload(page) {
 async function ConfirmasiVerif(page){
     const nextStepsVerifikasiData = prompt('Apakah Kamu Ingin Melanjutkan Verifikasi Data ? (ya/tidak)');
       if (nextStepsVerifikasiData.toLowerCase() === 'ya') {
-          
+
           await page.waitForSelector('body > div:nth-child(5) > section > div > main > div > div > section.steps_container > ul > li.step.finalize.open > div > form > div.form_row.submit > a.button.run_validation');
           await page.click('body > div:nth-child(5) > section > div > main > div > div > section.steps_container > ul > li.step.finalize.open > div > form > div.form_row.submit > a.button.run_validation');
           console.log('Loading Proses ... ');
@@ -87,18 +85,18 @@ async function ConfirmasiVerif(page){
                 process.exit();
               }
           }
-          
+
         }catch{}
         try{
         await page.waitForSelector('body > div:nth-child(5) > section > div > main > div > div > section.steps_container > ul > li.step.open > div > form > div.form_row.server_type > a',{timeout :20000});
         await page.click('body > div:nth-child(5) > section > div > main > div > div > section.steps_container > ul > li.step.open > div > form > div.form_row.server_type > a');
         console.log(' Good Job !!! , Certificate Sudah Di Dapatkan Di Directory Download Mu !!');
-      
-        
+
+
         }catch{}
       }else{
           console.log('Silahkan Verifikasi di https://manage.sslforfree.com');
-          process.exit(); 
+          process.exit();
       }
   }
 
@@ -124,17 +122,17 @@ async function ConfirmasiVerif(page){
     let selector = 'body > div:nth-child(5) > section > div > main > div > div > section.steps_container > ul > li.step.open > div';
     await page.waitForSelector(selector);
 
-  
+
     await page.$eval(selector,(el)=> el.scrollIntoView({behavior:'smooth'}));
     await page.keyboard.press('Enter');
-    
+
     console.log('Loading ... ');
     await new Promise(r => setTimeout(r, 2000));
     console.log('Proses Pengisian Domain ... ');
-    // Isi Domain    
+    // Isi Domain
     await page.waitForSelector('body > div:nth-child(5) > section > div > main > div > div > section.steps_container > ul > li.step.open > div > form > div.form_row.domains > div > div > input[type=text]:nth-child(3)');
     await page.type('body > div:nth-child(5) > section > div > main > div > div > section.steps_container > ul > li.step.open > div > form > div.form_row.domains > div > div > input[type=text]:nth-child(3)',Domain);
-    
+
     console.log('Loading ... ');
     await new Promise(r => setTimeout(r, 2000));
     console.log('Proses Validity ... ');
@@ -142,20 +140,20 @@ async function ConfirmasiVerif(page){
     await page.waitForSelector('body > div:nth-child(5) > section > div > main > div > div > section.steps_container > ul > li:nth-child(2)');
     await page.click('body > div:nth-child(5) > section > div > main > div > div > section.steps_container > ul > li:nth-child(2)');
     await page.click('body > div:nth-child(5) > section > div > main > div > div > section.steps_container > ul > li.step.open > div > form > div:nth-child(2) > label > div');
-    
-    
+
+
     console.log('Loading ... ');
     await new Promise(r => setTimeout(r, 2000));
     console.log('Proses CSR Contact ... ');
     //CSR CONTACT
     await page.click('body > div:nth-child(5) > section > div > main > div > div > section.steps_container > ul > li:nth-child(3)');
-    
+
     console.log('Loading ... ');
     await new Promise(r => setTimeout(r, 2000));
     console.log('Proses Final Step ... ');
     //FINAL STEP
     await page.click('body > div:nth-child(5) > section > div > main > div > div > section.steps_container > ul > li.step.is_lockable.finalize.locked');
-   
+
     console.log('Loading ... ');
     console.log('Proses Pengecekan Account ... ');
 
@@ -166,10 +164,10 @@ async function ConfirmasiVerif(page){
     await page.$eval(selectornext,(el)=> el.scrollIntoView({behavior:'smooth'}));
     await page.waitForSelector('body > div:nth-child(5) > section > div > main > div > div > section.steps_container > ul > li.step.is_lockable.finalize.open > div > form > div.form_row.checkout > a');
     await page.click('body > div:nth-child(5) > section > div > main > div > div > section.steps_container > ul > li.step.is_lockable.finalize.open > div > form > div.form_row.checkout > a');
-    
+
     console.log('Loading ... ');
     await new Promise(r => setTimeout(r, 7000));
-    
+
     console.log('Verifikasi ... ');
 
     await page.waitForSelector('body > div:nth-child(5) > section > div > main > div > div > section.steps_container > ul > li.step.open > div > form > div:nth-child(3) > label > div.radio_button');
@@ -194,7 +192,7 @@ console.log("TTL = "+ c_ttl);
 reviews = [{
     'name' : c_name,
     'to' : c_to,
-    'ttl' : c_ttl 
+    'ttl' : c_ttl
 }];
 const filePath = './DNS_CNAME.txt';
 const newLine = JSON.stringify(reviews);
@@ -208,10 +206,10 @@ console.log('File Add DNS_CNAME.txt');
           let selectorfinal = 'body > div:nth-child(5) > section > div > main > div > div > section.steps_container > ul > li.step.open > div > form > div:nth-child(5) > a';
           await page.$eval(selectorfinal,(el)=> el.scrollIntoView({behavior:'smooth'}));
           await page.click('body > div:nth-child(5) > section > div > main > div > div > section.steps_container > ul > li.step.open > div > form > div:nth-child(5) > a');
-    
+
 
         ConfirmasiVerif(page);
-        
+
 
 
 
@@ -219,13 +217,13 @@ console.log('File Add DNS_CNAME.txt');
         } else {
           console.log('Anda memilih untuk tidak melanjutkan.');
           console.log('Silahkan Verifikasi di https://manage.sslforfree.com');
-          process.exit(); 
+          process.exit();
         }
-        
+
         // Menutup interface untuk mengakhiri program
 
-    
+
     // await browser.close();
 
-    
+
 })();
