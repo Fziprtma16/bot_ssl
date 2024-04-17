@@ -35,24 +35,17 @@ async function CheckingLimited(page){
 
 
 async function waitForDownload(page) {
-    await page.waitForEvent('download'); // Menunggu sampai file diunduh
+    await page.waitForEvent('download');
   }
 
   async function moveDownloadedFile(page, targetDirectory) {
     const downloads = await page.browser().contexts()[0].downloads();
-    const download = downloads.pop(); // Ambil file terakhir yang diunduh
-
-    // Tunggu hingga unduhan selesai
+    const download = downloads.pop();
     await download.waitForFinished();
-
-    // Tentukan path lama dan baru file yang diunduh
     const oldPath = download.path();
     const fileName = download.suggestedFilename();
     const newPath = path.join(targetDirectory, fileName);
-
-    // Pindahkan file ke direktori target
     fs.renameSync(oldPath, newPath);
-    // console.log('File berhasil dipindahkan ke:', newPath);
     console.log(' Good Job !!! , Certificate Sudah Di Dapatkan !');
   }
 
